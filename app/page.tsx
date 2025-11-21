@@ -1,4 +1,5 @@
 import { BrandSection } from "@/components/BrandSection";
+import { FeatureSection } from "@/components/FeatureSection";
 import { HeroSection } from "@/components/HeroSection";
 import { StatSection } from "@/components/StatSection";
 
@@ -8,6 +9,7 @@ export default function Home() {
       <HeroSection />
       <BrandSection />
       <StatSection />
+      <FeatureSection />
     </div>
   );
 }
