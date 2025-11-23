@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils"
 import { SeamlessIntegratiion } from "./Features/SeamlessIntegration"
 import { AutomaticGrading } from "./Features/AutomaticGrading"
+import { RealtimeCollabration } from "./Features/RealtimeCollabration"
 
 export const FeatureSection = () => {
     return (
@@ -8,8 +9,8 @@ export const FeatureSection = () => {
             <Header />
             <div className="mt-20 grid cols-1 lg:grid-cols-5 gap-4 auto-rows-[25rem] max-w-3xl mx-auto lg:max-w-none">
                 <BentoCard col="3"
-                    title="Real-time Collaboration Tools"
-                    subtitle="Seamless interaction between teachers and students with automated workflows and intelligent notifications"
+                    title="AI-Powered Learning"
+                    subtitle="Personalized study assistance and intelligent content recommendations for every student"
                 >
                     <SeamlessIntegratiion />
                 </BentoCard>
@@ -24,9 +25,11 @@ export const FeatureSection = () => {
                     subtitle="AI-powered vector database for instant retrieval of educational materials, research papers, and course content"
                 />
                 <BentoCard col="3"
-                    title="AI-Powered Learning"
-                    subtitle="Personalized study assistance and intelligent content recommendations for every student"
-                />
+                    title="Real-time Collaboration Tools"
+                    subtitle="Seamless interaction between teachers and students with automated workflows and intelligent notifications"
+                >
+                    <RealtimeCollabration />
+                </BentoCard>
             </div>
         </div>
     )
