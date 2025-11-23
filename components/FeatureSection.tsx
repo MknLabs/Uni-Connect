@@ -6,7 +6,7 @@ import { OrditCircle } from "./Features/OrbitCircle"
 
 export const FeatureSection = () => {
     return (
-        <div className="w-full max-w-7xl mx-auto py-4 px-4 md:px-8 md:my-20 md:py-20">
+        <section className="w-full max-w-7xl mx-auto py-4 px-4 md:px-8 md:my-20 md:py-20" id="product">
             <Header />
             <div className="mt-20 grid cols-1 lg:grid-cols-5 gap-4 auto-rows-[25rem] max-w-3xl mx-auto lg:max-w-none">
                 <BentoCard col="3"
@@ -34,7 +34,7 @@ export const FeatureSection = () => {
                     <RealtimeCollabration />
                 </BentoCard>
             </div>
-        </div>
+        </section>
     )
 }
 

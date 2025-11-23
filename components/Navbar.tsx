@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform } from "framer-motion"
 import { Logo } from "./Logo"
 import { Button } from "./Button"
+import Link from "next/link"
 
 export function Navbar() {
     return (
@@ -46,14 +47,14 @@ export function DesktopNavbar() {
                 className="flex flex-row flex-1 items-center justify-end space-x-2 text-sm"
             >
                 <div className="relative">
-                    <a className="text-black/90 relative px-3 py-1.5 transition-colors" href="/#home">
+                    <Link className="text-black/90 relative px-3 py-1.5 transition-colors" href="/#home">
                         <span className="relative z-10">Home</span>
-                    </a>
+                    </Link>
                 </div>
                 <div className="relative">
-                    <a className="text-black/90 relative px-3 py-1.5 transition-colors" href="/#product">
+                    <Link className="text-black/90 relative px-3 py-1.5 transition-colors" href="/#product">
                         <span className="relative z-10">Product</span>
-                    </a>
+                    </Link>
                 </div>
             </div>
 
