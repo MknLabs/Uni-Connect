@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils"
 import { SeamlessIntegratiion } from "./Features/SeamlessIntegration"
 import { AutomaticGrading } from "./Features/AutomaticGrading"
 import { RealtimeCollabration } from "./Features/RealtimeCollabration"
+import { OrditCircle } from "./Features/OrbitCircle"
 
 export const FeatureSection = () => {
     return (
@@ -23,7 +24,9 @@ export const FeatureSection = () => {
                 <BentoCard
                     title="Smart Resource Management"
                     subtitle="AI-powered vector database for instant retrieval of educational materials, research papers, and course content"
-                />
+                >
+                    <OrditCircle />
+                </BentoCard>
                 <BentoCard col="3"
                     title="Real-time Collaboration Tools"
                     subtitle="Seamless interaction between teachers and students with automated workflows and intelligent notifications"
