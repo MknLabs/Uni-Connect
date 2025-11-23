@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils"
 import { SeamlessIntegratiion } from "./Features/SeamlessIntegration"
+import { AutomaticGrading } from "./Features/AutomaticGrading"
 
 export const FeatureSection = () => {
     return (
@@ -15,7 +16,9 @@ export const FeatureSection = () => {
                 <BentoCard
                     title="Automated Grading"
                     subtitle="Smart assessment tools that save teachers hours while providing detailed student feedback"
-                />
+                >
+                    <AutomaticGrading />
+                </BentoCard>
                 <BentoCard
                     title="Smart Resource Management"
                     subtitle="AI-powered vector database for instant retrieval of educational materials, research papers, and course content"
@@ -58,7 +61,7 @@ export const BentoCard = ({ children, col = "2", title, subtitle }: {
             <div className="absolute inset-0 w-full h-full overflow-hidden transition-opacity duration-300">
                 {children}
             </div>
-            <div className="absolute z-10 inset-x-0 bottom-0 h-[70%] bg-linear-to-t from-white via-white to-transparent" />
+            <div className="absolute z-10 inset-x-0 bottom-0 h-[40%] bg-linear-to-t from-white via-white to-transparent" />
             <div className="p-6 absolute z-10 bottom-0">
                 <h3 className="inline-block text-[22px] font-medium leading-[31px] font-rubik text-black">
                     {title}
