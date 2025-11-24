@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import AuthForm from "@/components/Loginpage/AuthForm";
 import { DottedMapComponent } from "@/components/Loginpage/DottedMap";
 import { Logo } from "@/components/ui/Logo";
@@ -27,7 +28,9 @@ export default function Login() {
             </div>
             <div className="flex-1 flex flex-col items-center justify-center py-4 px-6">
                 <Logo className="lg:hidden mb-8" />
-                <AuthForm />
+                <Suspense fallback={<div className="text-orange-500">Loading...</div>}>
+                    <AuthForm />
+                </Suspense>
             </div>
         </div>
     );
