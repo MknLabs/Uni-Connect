@@ -14,7 +14,7 @@ export const SectionHeaderBlock = ({ className, children }: {
 export const SectionHeader = ({ children, className, as = "h2" }: {
     children: React.ReactNode
     className?: string
-    as?: "h2" | "h3"
+    as?: "h1" | "h2" | "h3"
 }) => {
     const Tag = as;
     return (
@@ -24,9 +24,12 @@ export const SectionHeader = ({ children, className, as = "h2" }: {
     )
 }
 
-export const SectionSubHeader = ({ children }: { children: React.ReactNode }) => {
+export const SectionSubHeader = ({ children, className }: {
+    children: React.ReactNode
+    className?: string
+}) => {
     return (
-        <p className="text-muted-foreground mx-4">
+        <p className={cn("text-muted-foreground", className)}>
             {children}
         </p>
     )

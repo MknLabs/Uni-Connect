@@ -23,7 +23,7 @@ const Header = () => {
                 <span className="text-[oklch(0.65_0.25_30)]">NO</span>
                 {" issues"}
             </SectionHeader>
-            <SectionSubHeader>
+            <SectionSubHeader className="mx-4">
                 {"Scalable, reliable, and always available - grows with your institution's needs."}
             </SectionSubHeader>
         </SectionHeaderBlock>
