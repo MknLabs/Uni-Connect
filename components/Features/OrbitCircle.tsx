@@ -1,6 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Icons } from "../Icons";
+import { IconFileTypeCsv, IconFileTypeDocx, IconFileTypePdf, IconFileTypePpt } from "@tabler/icons-react";
 
 export function OrditCircle() {
     return (
@@ -11,7 +12,25 @@ export function OrditCircle() {
             <Circle variant="secondary">
                 <Icons.logo />
             </Circle>
+            <IconBall className="top-5 right-1/2"><IconFileTypePdf /></IconBall>
+            <IconBall className="top-1/2 right-1/2 -translate-x-18 size-8"><IconFileTypeCsv /></IconBall>
+            <IconBall className="top-1/2 right-18 -translate-y-10 size-12"><IconFileTypeDocx /></IconBall>
+            <IconBall className="bottom-20 right-12 size-8"><IconFileTypePpt /></IconBall>
         </Circle>
+    )
+}
+
+export function IconBall({ children, className }: {
+    className?: string
+    children: React.ReactNode
+}) {
+    return (
+        <div className={cn("absolute size-10 rounded-full bg-gray-700 p-2 flex items-center justify-center ",
+            "border-[0.7px] border-[#E4E4E4] text-[#E4E4E4] drop-shadow-[0px_4px_6px_rgba(0,0,0,0.10)]",
+            className
+        )}>
+            {children}
+        </div>
     )
 }
 
