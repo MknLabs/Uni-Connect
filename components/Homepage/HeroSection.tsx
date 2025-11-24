@@ -1,7 +1,7 @@
 import Image from "next/image"
-import { Button } from "./Button"
+import { Button } from "../ui/button"
 import { HeroHeading } from "./HeroHeading"
-import { MobilePhone } from "./MobilePhone"
+import { MobilePhone } from "../ui/MobilePhone"
 
 export const HeroSection = () => {
     return (

@@ -1,6 +1,6 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import { Icons } from "../Icons";
+import { Icons } from "../../ui/Icons";
 import { IconFileTypeCsv, IconFileTypeDocx, IconFileTypePdf, IconFileTypePpt } from "@tabler/icons-react";
 
 export function OrditCircle() {

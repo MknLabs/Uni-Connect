@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion"
 import { Logo } from "./Logo"
-import { Button } from "./Button"
+import { Button } from "./button"
 import Link from "next/link"
 
 export function Navbar() {

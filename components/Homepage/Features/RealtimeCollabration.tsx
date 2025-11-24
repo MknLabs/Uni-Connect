@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Circle } from "./AutomaticGrading";
-import { Icons } from "../Icons";
+import { Icons } from "../../ui/Icons";
 import { NotificationList } from "./NotificationList";
 
 export function RealtimeCollabration() {

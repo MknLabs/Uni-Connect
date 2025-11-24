@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import { SectionHeader, SectionHeaderBlock, SectionSubHeader } from "./SectionHeader"
+import { SectionHeader, SectionHeaderBlock, SectionSubHeader } from "../ui/SectionHeader"
 
 export const StatSection = () => {
     return (
