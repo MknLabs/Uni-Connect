@@ -1,11 +1,17 @@
 import { z } from 'zod';
 import { CreateUserSchema } from "./user.type";
 
-export const CreateUserFormSchema = CreateUserSchema.body.extend({
+export const SignupFormSchema = CreateUserSchema.body.extend({
     confirmPassword: z.string()
 }).refine((data) => data.password === data.confirmPassword, {
     message: 'Passwords do not match',
     path: ['confirmPassword']
 });
 
-export type CreateUserForm = z.infer<typeof CreateUserFormSchema>
+export const LoginFormSchema = CreateUserSchema.body.pick({
+    email: true,
+    password: true
+});
+
+export type SignupForm = z.infer<typeof SignupFormSchema>;
+export type LoginForm = z.infer<typeof LoginFormSchema>;

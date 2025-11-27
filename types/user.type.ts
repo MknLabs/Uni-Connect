@@ -18,13 +18,6 @@ export const CreateUserSchema = {
     }),
 } as const;
 
-export const LoginSchema = {
-    body: z.object({
-        email: UserSchema.shape.email,
-        password: UserSchema.shape.password.unwrap(),
-    }),
-} as const;
-
 export const GetUserSchema = {
     query: z.union([
         z.object({
@@ -49,7 +42,6 @@ export const DeleteUserSchema = {
 } as const;
 
 export type CreateUserInput = z.infer<typeof CreateUserSchema.body>;
-export type LoginInput = z.infer<typeof LoginSchema.body>;
 export type GetUserInput = z.infer<typeof GetUserSchema.query>;
 export type UpdateUserInput = z.infer<typeof UpdateUserSchema.body>;
 export type DeleteUserInput = z.infer<typeof DeleteUserSchema.query>;

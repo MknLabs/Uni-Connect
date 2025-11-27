@@ -1,13 +1,18 @@
 "use client";
 
-import { Icons } from '../ui/Icons';
-import { Button } from '@/components/ui/button';
-import InputBox from '@/components/ui/InputBox';
-import React, { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { CreateUserForm, CreateUserFormSchema } from '@/types/auth.type';
-import { LoginSchema } from '@/types/user.type';
-import { prettifyError } from 'zod';
+import { toast } from "sonner";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { authClient } from "@/app/(auth)/actions";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter, useSearchParams } from "next/navigation";
+import { SignupFormSchema, SignupForm, LoginFormSchema, LoginForm } from "@/types/auth.type";
+
+import { Icons } from "@/components/ui/Icons";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { ErrorContext } from "better-auth/react";
 
 
 const AuthForm: React.FC = () => {
@@ -16,218 +21,169 @@ const AuthForm: React.FC = () => {
     const urlMode = searchParams.get('tab');
     const initialMode = urlMode === 'sign-up' ? 'signup' : 'login';
     const [mode, setMode] = useState<'login' | 'signup'>(initialMode);
-    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState('');
-    const [formData, setFormData] = useState<CreateUserForm>({
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
+
+    const form = useForm<SignupForm | LoginForm>({
+        resolver: zodResolver(mode === "signup" ? SignupFormSchema : LoginFormSchema),
+        defaultValues: {
+            name: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+        },
     });
 
-    useEffect(() => {
-        setError('');
-        setSuccess('');
-    }, [mode]);
+    const onSubmit = async (values: SignupForm | LoginForm) => {
+        setLoading(true);
 
-    const updateFormData = (field: keyof CreateUserForm, value: string) => {
-        setFormData(prev => ({ ...prev, [field]: value }));
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError('');
-        setSuccess('');
-        setLoading(true)
+        const formConfig = {
+            callbackURL: "/dashboard",
+            fetchOptions: {
+                onResponse: () => setLoading(false),
+                onRequest: () => setLoading(true),
+                onError: (ctx: ErrorContext) => { toast.error(ctx.error.message) },
+                onSuccess: () => router.push("/dashboard"),
+            },
+        }
 
         try {
-            if (mode === 'signup') {
-                const result = CreateUserFormSchema.safeParse(formData);
-                if (!result.success) {
-                    setError(prettifyError(result.error));
-                    return;
-                }
+            if (mode === "signup") {
+                const signupValues = values as SignupForm;
 
-                const { confirmPassword, ...userData } = result.data
-
-                const res = await fetch("/api/user", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(userData),
+                await authClient.signUp.email({
+                    name: signupValues.name,
+                    email: signupValues.email,
+                    password: signupValues.password,
+                    ...formConfig
                 });
-
-                if (!res.ok) {
-                    setError(`Failed to Create user : ${res.statusText}`)
-                }
-                setSuccess('Account created successfully! Please login.');
-                setMode("login")
-
             } else {
-                const result = LoginSchema.body.safeParse(formData);
-                if (!result.success) {
-                    setError(prettifyError(result.error));
-                    return;
-                }
+                const loginValues = values as LoginForm;
 
-                const res = await fetch("/api/auth/login", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        email: formData.email,
-                        password: formData.password
-                    }),
-                });
-
-                if (!res.ok) {
-                    setError(`Login failed: ${res.statusText}`);
-                    return;
-                }
-                setSuccess('Login successful!');
-                router.push("/dashboard")
+                await authClient.signIn.email({
+                    email: loginValues.email,
+                    password: loginValues.password,
+                    ...formConfig
+                })
             }
-
         } catch (error) {
-            setError('An unexpected error occurred. Please try again.');
+            toast.error("Something went wrong");
+            console.log(error)
         } finally {
             setLoading(false);
         }
-
     };
 
     const handleForgotPassword = async () => {
         //TODO: Implement forget password flow
     };
 
-    const handleGoogleLogin = () => {
-        // TODO: Implement Google OAuth login functionality
+    const handleGoogleLogin = async () => {
+        await authClient.signIn.social({
+            provider: "google",
+        });
     };
 
     return (
         <div className="w-full max-w-md space-y-6">
             <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold text-neutral-800 mb-2">
-                    {mode === 'login'
-                        ? 'Welcome Back'
-                        : 'Create your account'}
+                <h1 className="text-3xl font-bold text-neutral-800">
+                    {mode === "signup" ? "Create your account" : "Welcome Back"}
                 </h1>
-                <p className="text-neutral-600">
-                    {mode === 'login'
-                        ? 'Sign in to continue'
-                        : 'Sign up to get started'}
+                <p className="text-neutral-600 text-sm">
+                    {mode === "signup" ? "Sign up to continue" : "Sign in to get started"}
                 </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-                {error && (
-                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
-                        {error}
-                    </div>
-                )}
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
 
-                {success && (
-                    <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl text-sm">
-                        {success}
-                    </div>
-                )}
+                    {mode === "signup" && (
+                        <FormField
+                            control={form.control}
+                            name="name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Full Name</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Enter your full name" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    )}
 
-                {mode === 'signup' && (
-                    <InputBox
-                        label="Full Name"
-                        type="text"
-                        placeholder="Enter your full name"
-                        value={formData.name}
-                        onChange={(e) => updateFormData('name', e.target.value)}
-                        disabled={loading}
+                    <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Email</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Enter your email" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
                     />
-                )}
 
-                <InputBox
-                    label="Email Address"
-                    type="email"
-                    placeholder="Enter your email"
-                    value={formData.email}
-                    onChange={(e) => updateFormData('email', e.target.value)}
-                    disabled={loading}
-                />
-                <InputBox
-                    label="Password"
-                    type="password"
-                    placeholder={
-                        mode === 'login'
-                            ? "Enter your password"
-                            : "Create a password"
-                    }
-                    value={formData.password}
-                    onChange={(e) => updateFormData('password', e.target.value)}
-                    disabled={loading}
-                />
-                {mode === 'signup' && (
-                    <InputBox
-                        label="Confirm Password"
-                        type="password"
-                        placeholder="Confirm your password"
-                        value={formData.confirmPassword}
-                        onChange={(e) => updateFormData('confirmPassword', e.target.value)}
-                        disabled={loading}
+                    <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Password</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="password"
+                                        placeholder="••••••••"
+                                        autoComplete={mode === "signup" ? "new-password" : "password"}
+                                        {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
                     />
-                )}
 
-                {mode === 'login' && (
-                    <div className="text-right">
-                        <button
-                            type="button"
-                            onClick={handleForgotPassword}
-                            disabled={loading}
-                            className="text-sm text-orange-600 hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            Forgot Password?
-                        </button>
-                    </div>
-                )}
+                    {mode === "signup" && (
+                        <FormField
+                            control={form.control}
+                            name="confirmPassword"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Confirm Password</FormLabel>
+                                    <FormControl>
+                                        <Input type="password" placeholder="••••••••" autoComplete="new-password" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    )}
 
-                <Button type="submit" variant="primary" className="w-full" disabled={loading}>
-                    {loading
-                        ? (mode === 'login' ? 'Signing In...' : 'Processing...')
-                        : (mode === 'login' ? 'Sign In' : 'Continue')
-                    }
-                </Button>
-
-                <div className="relative my-6">
-                    <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-neutral-300"></div>
-                    </div>
-                    <div className="relative flex justify-center text-sm">
-                        <span className="px-4 bg-white text-neutral-500">Or continue with</span>
-                    </div>
-                </div>
-
-                <Button
-                    type="button"
-                    variant="outline"
-                    className="w-full flex items-center justify-center gap-2"
-                    onClick={handleGoogleLogin}
-                >
-                    <Icons.google />
-                    Continue with Google
-                </Button>
-
-            </form>
-
-            <div className="mt-6 text-center">
-                <p className="text-sm text-neutral-600">
-                    {mode === 'login' ? "Don't have an account? " : "Already have an account? "}
-                    <button
-                        onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}
-                        className="text-orange-600 font-medium hover:underline"
+                    <Button type="submit" className="w-full" disabled={loading} variant="primary">
+                        {mode === "signup" ? "Continue" : "Sign In"}
+                    </Button>
+                    <Button
+                        type="button"
+                        disabled={loading}
+                        className="w-full flex items-center justify-center gap-2"
+                        onClick={handleGoogleLogin}
                     >
-                        {mode === 'login' ? 'Sign Up' : 'Sign In'}
-                    </button>
-                </p>
+                        <Icons.google />
+                        Continue with Google
+                    </Button>
+                </form>
+            </Form>
+
+            <div className="text-center text-sm">
+                {mode === "signup" ? "Already registered? " : "Don't have an account? "}
+                <button
+                    className="text-orange-600 hover:underline font-semibold"
+                    onClick={() => setMode(mode === "signup" ? "login" : "signup")}
+                >
+                    {mode === "signup" ? "Sign In" : "Sign Up"}
+                </button>
             </div>
         </div>
     );
