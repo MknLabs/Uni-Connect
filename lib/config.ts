@@ -4,12 +4,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const EnvSchema = z.object({
-    MONGODB_URI: z.url().nonempty("MONGODB_URI is required"),
-    JWT_SECRET: z.string().min(32, "JWT_SECRET must be at least 32 characters long"),
+    POSTGRES_URL: z.url().nonempty("POSTGRES_URL is required"),
 })
 
 
-const env = (() => {
+export const env = (() => {
     const result = EnvSchema.safeParse(process.env);
     if (!result.success) {
         throw new Error(
@@ -20,6 +19,3 @@ const env = (() => {
     }
     return result.data;
 })();
-
-
-export default env;

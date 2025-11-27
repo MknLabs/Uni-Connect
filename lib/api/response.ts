@@ -1,5 +1,4 @@
 import APIError from "./error";
-import connectDB from "@/config/database";
 import { NextRequest, NextResponse } from "next/server";
 import { errorHandler } from "@/middlewares/error-handler";
 import { validateRequest } from '@/middlewares/validate-request';
@@ -84,9 +83,6 @@ export const asyncHandler = <T, S extends ValidationSchema | undefined>(
 ) => {
     return async (req: NextRequest, context: { params: Promise<Record<string, string>> }) => {
         try {
-            // Ensure database connection
-            await connectDB();
-
             // Resolve the Promise for params (Next.js 14+ compatibility)
             const resolvedParams = await context.params;
 
