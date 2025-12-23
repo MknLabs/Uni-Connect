@@ -3,6 +3,7 @@ import { FeatureSection } from "@/components/Homepage/FeatureSection";
 import { HeroSection } from "@/components/Homepage/HeroSection";
 import { Navbar } from "@/components/ui/Navbar";
 import { StatSection } from "@/components/Homepage/StatSection";
+import { Footer } from "@/components/Homepage/FooterSection";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <BrandSection />
       <StatSection />
       <FeatureSection />
+      <Footer />
     </div>
   );
 }
