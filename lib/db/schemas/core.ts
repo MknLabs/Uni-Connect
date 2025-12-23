@@ -3,29 +3,29 @@ import { pgTable, varchar, text, integer, decimal, serial, boolean, date, timest
 import { user } from "./auth";
 
 export const departments = pgTable("departments", {
-    id: serial("id").primaryKey(),
+    id: text("id").primaryKey(),
     code: varchar("code", { length: 10 }).notNull().unique(),
     name: varchar("name", { length: 100 }).notNull(),
-    headOfDepartment: integer("head_of_department"),
+    headOfDepartment: text("head_of_department"),
 });
 
 export const faculty = pgTable("faculty", {
-    id: serial("id").primaryKey(),
+    id: text("id").primaryKey(),
     facultyId: varchar("faculty_id", { length: 20 }).notNull().unique(),
-    departmentId: integer("department_id").notNull(),
+    departmentId: text("department_id").notNull(),
     designation: varchar("designation", {
         enum: ["professor", "assistant_professor", "associate_professor", "lecturer"]
     }).notNull().default("assistant_professor"),
     status: varchar("status", { enum: ["active", "on_leave", "retired"] }).notNull().default("active"),
-    office: varchar("office", { length: 50 }),
+    office: varchar("office", { length: 100 }),
     phone: varchar("phone", { length: 20 })
 });
 
 export const students = pgTable("students", {
-    id: serial("id").primaryKey(),
+    id: text("id").primaryKey(),
     studentId: varchar("student_id", { length: 20 }).notNull().unique(),
-    seriesId: integer("series_id").notNull(),
-    departmentId: integer("department_id").notNull(),
+    seriesId: text("series_id").notNull(),
+    departmentId: text("department_id").notNull(),
     currentSemester: integer("current_semester").notNull().default(1),
     major: varchar("major", { length: 100 }),
     gpa: decimal("gpa", { precision: 3, scale: 2 }),
@@ -33,20 +33,20 @@ export const students = pgTable("students", {
 });
 
 export const academicSeries = pgTable("academic_series", {
-    id: serial("id").primaryKey(),
+    id: text("id").primaryKey(),
     seriesName: varchar("series_name", { length: 20 }).notNull().unique(),
     startYear: integer("start_year").notNull(),
     currentSemester: integer("current_semester").notNull(),
     totalSemesters: integer("total_semesters").notNull().default(8),
-    departmentId: integer("department_id"),
+    departmentId: text("department_id"),
 });
 
 export const courses = pgTable("courses", {
-    id: serial("id").primaryKey(),
+    id: text("id").primaryKey(),
     courseCode: varchar("course_code", { length: 20 }).notNull().unique(),
     courseName: varchar("course_name", { length: 200 }).notNull(),
     credits: integer("credits").notNull().default(3),
-    departmentId: integer("department_id").notNull(),
+    departmentId: text("department_id").notNull(),
     description: text("description"),
     semesterOffered: integer("semester_offered"),
     type: varchar("type", { enum: ["theory", "sessional", "other"] }),
@@ -56,8 +56,8 @@ export const courses = pgTable("courses", {
 });
 
 export const sections = pgTable("sections", {
-    id: serial("id").primaryKey(),
-    courseId: integer("course_id").notNull(),
+    id: text("id").primaryKey(),
+    courseId: text("course_id").notNull(),
     sectionCode: varchar("section_code", { length: 10 }).notNull(),
     semester: varchar("semester", { length: 20 }).notNull(),
     schedule: text("schedule"),
@@ -66,13 +66,13 @@ export const sections = pgTable("sections", {
     currentStudents: integer("current_students").default(0),
     // Store multiple faculty IDs as comma-separated or JSON TODO: handle it better
     facultyIds: text("faculty_ids"),
-    primaryFacultyId: integer("primary_faculty_id").notNull(),
+    primaryFacultyId: text("primary_faculty_id").notNull(),
 });
 
 export const enrollments = pgTable("enrollments", {
-    id: serial("id").primaryKey(),
-    studentId: integer("student_id").notNull(),
-    sectionId: integer("section_id").notNull(),
+    id: text("id").primaryKey(),
+    studentId: text("student_id").notNull(),
+    sectionId: text("section_id").notNull(),
     enrollmentDate: date("enrollment_date").notNull().defaultNow(),
     status: varchar("status", {
         enum: ["enrolled", "waitlisted", "dropped", "completed"]
@@ -83,8 +83,8 @@ export const enrollments = pgTable("enrollments", {
 });
 
 export const assignments = pgTable("assignments", {
-    id: serial("id").primaryKey(),
-    sectionId: integer("section_id").notNull(),
+    id: text("id").primaryKey(),
+    sectionId: text("section_id").notNull(),
     title: varchar("title", { length: 200 }).notNull(),
     assignmentType: varchar("assignment_type", {
         enum: ["homework", "quiz", "exam", "project"]
@@ -95,9 +95,9 @@ export const assignments = pgTable("assignments", {
 });
 
 export const grades = pgTable("grades", {
-    id: serial("id").primaryKey(),
-    studentId: integer("student_id").notNull(),
-    assignmentId: integer("assignment_id").notNull(),
+    id: text("id").primaryKey(),
+    studentId: text("student_id").notNull(),
+    assignmentId: text("assignment_id").notNull(),
     pointsEarned: integer("points_earned"),
     grade: varchar("grade", { length: 5 }),
     feedback: text("feedback"),
@@ -105,21 +105,21 @@ export const grades = pgTable("grades", {
 });
 
 export const announcements = pgTable("announcements", {
-    id: serial("id").primaryKey(),
+    id: text("id").primaryKey(),
     title: varchar("title", { length: 200 }).notNull(),
     content: text("content").notNull(),
     authorId: text("author_id").notNull(),
     targetAudience: varchar("target_audience", {
         enum: ["all", "students", "faculty", "department", "course"]
     }).notNull(),
-    targetId: integer("target_id"),
+    targetId: text("target_id"),
     publishDate: timestamp("publish_date").notNull().defaultNow(),
     isUrgent: boolean("is_urgent").default(false),
 });
 
 export const materials = pgTable("materials", {
-    id: serial("id").primaryKey(),
-    courseId: integer("course_id").notNull(),
+    id: text("id").primaryKey(),
+    courseId: text("course_id").notNull(),
     title: varchar("title", { length: 200 }).notNull(),
     filePath: varchar("file_path", { length: 500 }),
     fileType: varchar("file_type", { length: 50 }),
@@ -152,7 +152,6 @@ export const facultyRelations = relations(faculty, ({ one, many }) => ({
         references: [departments.id],
     }),
     sections: many(sections),
-    grades: many(grades),
 }));
 
 export const studentsRelations = relations(students, ({ one, many }) => ({
