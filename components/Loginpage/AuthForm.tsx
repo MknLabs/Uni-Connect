@@ -161,7 +161,7 @@ const AuthForm: React.FC = () => {
                         />
                     )}
 
-                    <Button type="submit" className="w-full" disabled={loading} variant="primary">
+                    <Button type="submit" className="w-full" disabled={loading} variant="default">
                         {mode === "signup" ? "Continue" : "Sign In"}
                     </Button>
                     <Button

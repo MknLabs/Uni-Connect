@@ -65,8 +65,12 @@ export function DesktopNavbar() {
                     display: contentStyle.buttonsDisplay
                 }}
             >
-                <Button variant="outline" href="/login">Login</Button>
-                <Button href="/login?tab=sign-up">Signup</Button>
+                <Button variant="outline" asChild>
+                    <Link href="/login">Login</Link>
+                </Button>
+                <Button asChild>
+                    <Link href="/login?tab=sign-up">Signup</Link>
+                </Button>
             </motion.div>
         </motion.div>
     )
