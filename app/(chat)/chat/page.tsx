@@ -30,6 +30,7 @@ import { useEffect, useState, type FC, type SVGProps } from "react";
 import { useShallow } from "zustand/shallow";
 import { MarkdownText } from "@/components/Chatpage/MarkdownText";
 import { useChatRuntime, AssistantChatTransport } from "@assistant-ui/react-ai-sdk";
+import { QueryDatabaseUI } from "@/components/Chatpage/tools/QueryDatabaseUI";
 
 const Grok: FC = () => {
 
@@ -40,6 +41,8 @@ const Grok: FC = () => {
     });
     return (
         <AssistantRuntimeProvider runtime={runtime}>
+            {/* Register the queryDatabase tool UI component */}
+            <QueryDatabaseUI />
             <ThreadPrimitive.Root className="flex w-full h-full flex-col items-stretch bg-[#fdfdfd] px-4 dark:bg-[#141414] min-h-screen py-4">
                 <ThreadPrimitive.Empty>
                     <div className="flex h-full flex-col items-center justify-center min-h-screen">
