@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 import { Button } from "../ui/button"
 import { HeroHeading } from "./HeroHeading"
 import { MobilePhone } from "../ui/MobilePhone"
@@ -17,7 +18,9 @@ export const HeroSection = () => {
                 Connect teachers, students, and resources through AI workflows.
             </SubHeading>
             <div className="mb-8 mt-6 z-10 sm:mb-10 sm:mt-8 flex w-full flex-col items-center justify-center gap-4 px-4 sm:px-8 sm:flex-row md:mb-20">
-                <Button size="lg">Get Started</Button>
+                <Button size="lg" asChild>
+                    <Link href="/login">Get Started</Link>
+                </Button>
             </div>
             <div className="pt-8 w-full min-h-84 relative">
                 <div className="absolute top-0 left-0 right-0 z-10">

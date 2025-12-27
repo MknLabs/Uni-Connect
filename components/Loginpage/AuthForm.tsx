@@ -37,12 +37,12 @@ const AuthForm: React.FC = () => {
         setLoading(true);
 
         const formConfig = {
-            callbackURL: "/dashboard",
+            callbackURL: "/chat",
             fetchOptions: {
                 onResponse: () => setLoading(false),
                 onRequest: () => setLoading(true),
                 onError: (ctx: ErrorContext) => { toast.error(ctx.error.message) },
-                onSuccess: () => router.push("/dashboard"),
+                onSuccess: () => router.push("/chat"),
             },
         }
 

@@ -6,7 +6,7 @@ export function proxy(request: NextRequest) {
     const token = request.cookies.get('better-auth.session_token')?.value;
 
     const requiresAuth = [
-        '/dashboard',
+        '/chat',
     ].some(route => pathname.startsWith(route));
 
     // If route requires auth and no token, redirect to login
@@ -17,12 +17,12 @@ export function proxy(request: NextRequest) {
     }
 
     if (pathname === '/login' && token) {
-        return NextResponse.redirect(new URL('/dashboard', request.url));
+        return NextResponse.redirect(new URL('/chat', request.url));
     }
 
     return NextResponse.next();
 }
 
 export const config = {
-    matcher: ['/dashboard/:path*', '/login'],
+    matcher: ['/chat/:path*', '/login'],
 };
