@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { ModelContext } from "@/hooks/useModel";
+import { AssistantRuntimeProvider } from "@assistant-ui/react";
+import { QueryDatabaseUI } from "@/components/Chatpage/tools/QueryDatabaseUI";
+import { useChatRuntime, AssistantChatTransport } from "@assistant-ui/react-ai-sdk";
 
 export default function ChatLayout({
     children,
@@ -10,9 +13,19 @@ export default function ChatLayout({
 }) {
     const [selectedModel, setSelectedModel] = useState<string>("gpt-4o-mini");
 
+    const runtime = useChatRuntime({
+        transport: new AssistantChatTransport({
+            api: "/api/chat",
+            body: { model: selectedModel },
+        }),
+    });
+
     return (
-        <ModelContext.Provider value={{ selectedModel, setSelectedModel }}>
-            {children}
-        </ModelContext.Provider>
+        <AssistantRuntimeProvider runtime={runtime}>
+            <QueryDatabaseUI />
+            <ModelContext.Provider value={{ selectedModel, setSelectedModel }}>
+                {children}
+            </ModelContext.Provider>
+        </AssistantRuntimeProvider>
     );
 }
