@@ -7,10 +7,12 @@ import { SYSTEM_PROMPT } from '@/lib/ai/prompt';
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
-    const { messages } = await req.json();
+    const { messages, model } = await req.json();
+
+    const selectedModel = model || "gpt-4o-mini";
 
     const result = streamText({
-        model: openai("gpt-4o-mini"),
+        model: openai(selectedModel),
         system: SYSTEM_PROMPT,
         tools: {
             queryDatabase: queryDatabase,

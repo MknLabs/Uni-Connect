@@ -31,12 +31,16 @@ import { useShallow } from "zustand/shallow";
 import { MarkdownText } from "@/components/Chatpage/MarkdownText";
 import { useChatRuntime, AssistantChatTransport } from "@assistant-ui/react-ai-sdk";
 import { QueryDatabaseUI } from "@/components/Chatpage/tools/QueryDatabaseUI";
+import { useModel } from "@/hooks/useModel";
+import ModelSelector from "@/components/Chatpage/ModelSelector";
 
 const Grok: FC = () => {
+    const { selectedModel } = useModel();
 
     const runtime = useChatRuntime({
         transport: new AssistantChatTransport({
             api: "/api/chat",
+            body: { model: selectedModel },
         }),
     });
     return (
@@ -92,21 +96,10 @@ const Composer: FC = () => {
                     <ComposerPrimitive.Input
                         placeholder="What do you want to know?"
                         minRows={1}
-                        className="my-2 h-6 max-h-[400px] min-w-0 flex-1 resize-none bg-transparent text-[#0d0d0d] text-base leading-6 outline-none placeholder:text-[#9a9a9a] dark:text-white dark:placeholder:text-[#6b6b6b]"
+                        className="my-2 h-6 max-h-100 min-w-0 flex-1 resize-none bg-transparent text-[#0d0d0d] text-base leading-6 outline-none placeholder:text-[#9a9a9a] dark:text-white dark:placeholder:text-[#6b6b6b]"
                     />
 
-                    <button
-                        type="button"
-                        className="mb-0.5 flex h-9 shrink-0 items-center gap-2 rounded-full px-2.5 text-[#0d0d0d] hover:bg-[#f0f0f0] dark:text-white dark:hover:bg-[#2a2a2a]"
-                    >
-                        <Moon width={18} height={18} className="shrink-0" />
-                        <div className="flex items-center gap-1 overflow-hidden transition-[max-width,opacity] duration-300 group-data-[empty=false]/composer:max-w-0 group-data-[empty=true]/composer:max-w-24 group-data-[empty=false]/composer:opacity-0 group-data-[empty=true]/composer:opacity-100">
-                            <span className="whitespace-nowrap font-semibold text-sm">
-                                Grok 4.1
-                            </span>
-                            <ChevronDownIcon width={16} height={16} className="shrink-0" />
-                        </div>
-                    </button>
+                    <ModelSelector />
 
                     <div className="relative mb-0.5 h-9 w-9 shrink-0 rounded-full bg-[#0d0d0d] text-white dark:bg-white dark:text-[#0d0d0d]">
                         <button
