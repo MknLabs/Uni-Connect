@@ -12,7 +12,6 @@ import {
 } from "@assistant-ui/react";
 import {
     ArrowUpIcon,
-    ChevronDownIcon,
     CopyIcon,
     Cross2Icon,
     Pencil1Icon,
@@ -20,7 +19,6 @@ import {
 } from "@radix-ui/react-icons";
 import {
     Mic,
-    Moon,
     Paperclip,
     Square,
     ThumbsDown,
@@ -34,7 +32,7 @@ import { QueryDatabaseUI } from "@/components/Chatpage/tools/QueryDatabaseUI";
 import { useModel } from "@/hooks/useModel";
 import ModelSelector from "@/components/Chatpage/ModelSelector";
 
-const Grok: FC = () => {
+const ChatPage: FC = () => {
     const { selectedModel } = useModel();
 
     const runtime = useChatRuntime({
@@ -47,22 +45,32 @@ const Grok: FC = () => {
         <AssistantRuntimeProvider runtime={runtime}>
             {/* Register the queryDatabase tool UI component */}
             <QueryDatabaseUI />
-            <ThreadPrimitive.Root className="flex w-full h-full flex-col items-stretch bg-[#fdfdfd] px-4 dark:bg-[#141414] min-h-screen py-4">
+            <ThreadPrimitive.Root className="flex w-full h-screen flex-col bg-[#fdfdfd] dark:bg-[#141414]">
                 <ThreadPrimitive.Empty>
-                    <div className="flex h-full flex-col items-center justify-center min-h-screen">
+                    <div className="flex h-full flex-col items-center justify-center">
                         <GrokLogo className="mb-6 h-10 text-[#0d0d0d] dark:text-white" />
-                        <Composer />
+                        <div className="w-full max-w-3xl px-4">
+                            <Composer />
+                        </div>
                     </div>
                 </ThreadPrimitive.Empty>
 
                 <AssistantIf condition={(s) => s.thread.isEmpty === false}>
-                    <ThreadPrimitive.Viewport className="flex grow flex-col overflow-y-scroll pt-16">
-                        <ThreadPrimitive.Messages components={{ Message: ChatMessage }} />
-                        <p className="mx-auto w-full max-w-3xl p-2 text-center text-[#9a9a9a] text-xs">
-                            Grok can make mistakes. Verify important information.
-                        </p>
-                    </ThreadPrimitive.Viewport>
-                    <Composer />
+                    <div className="flex flex-col h-full">
+                        <div className="flex-1 overflow-y-auto">
+                            <div className="pt-16 pb-24 px-4">
+                                <ThreadPrimitive.Messages components={{ Message: ChatMessage }} />
+                                <p className="mx-auto w-full max-w-3xl p-2 text-center text-[#9a9a9a] text-xs">
+                                    AI can make mistakes. Verify important information.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Fixed composer at bottom */}
+                        <div className="sticky bottom-0 left-0 right-0 pt-3 pb-4 px-4">
+                            <Composer />
+                        </div>
+                    </div>
                 </AssistantIf>
             </ThreadPrimitive.Root>
         </AssistantRuntimeProvider>
@@ -268,4 +276,4 @@ const GrokLogo = (props: SVGProps<SVGSVGElement>) => (
     </svg>
 );
 
-export default Grok;
+export default ChatPage;
